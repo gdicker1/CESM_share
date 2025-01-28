@@ -10,7 +10,7 @@ MODULE shr_mem_mod
   ! PUBLIC: Public interfaces
 
   public ::  shr_mem_getusage, &
-       shr_mem_init
+       shr_mem_init, shr_mem_prtusage
 
   ! PUBLIC: Public interfaces
 
@@ -115,6 +115,37 @@ CONTAINS
 
   end subroutine shr_mem_getusage
 
+  subroutine shr_mem_prtusage(prefix)
+
+    use shr_mpi_mod, only : shr_mpi_commrank
+    use mpi, only         : MPI_COMM_WORLD
+    implicit none
+
+    !----- arguments ---
+    character(len=*), optional :: prefix
+
+    !----- local ---
+    integer :: rank
+    integer :: ierr
+    integer :: GPTLprint_memusage
+    character(len=1024) :: l_pre = ' '
+
+    !---------------------------------------------------
+    call shr_mpi_commrank(MPI_COMM_WORLD, rank)
+    if ( rank .ne. 0 ) then
+      return
+    endif
+
+    if (present(prefix)) then
+       if (len_trim(prefix) > 0 ) then
+          l_pre = trim(prefix)
+       end if
+    endif
+
+    ierr = GPTLprint_memusage(trim(l_pre))
+    call flush()
+
+  end subroutine shr_mem_prtusage
   !===============================================================================
 
 END MODULE shr_mem_mod
