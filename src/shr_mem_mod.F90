@@ -129,6 +129,10 @@ CONTAINS
     integer :: ierr
     integer :: GPTLprint_memusage
     character(len=1024) :: l_pre = ' '
+    ! GDD changes to do a busy wait
+    integer, dimension(8) :: t     ! arg for data_and_time
+    integer :: tstart_ms, tstop_ms ! start and end times [ms]
+    integer, parameter :: dt = 200 ! desired length of sleep [ms]
 
     !---------------------------------------------------
     call shr_mpi_commrank(MPI_COMM_WORLD, rank)
@@ -141,6 +145,16 @@ CONTAINS
           l_pre = trim(prefix)
        end if
     endif
+
+    ! GDD busy wait
+    call date_and_time(values=t)
+    tstart_ms = (t(5)*3600+t(6)*60+t(7))*1000+t(8)
+    tstop_ms = 0
+    do while( dt >= (tstart_ms - tstop_ms) )
+      call date_and_time(values=t)
+      tstop_ms = (t(5)*3600+t(6)*60+t(7))*1000+t(8)
+    end do
+
 
     ierr = GPTLprint_memusage(trim(l_pre))
     call flush()
