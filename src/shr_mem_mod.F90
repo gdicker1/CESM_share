@@ -135,29 +135,29 @@ CONTAINS
     ! integer, parameter :: dt = 200 ! desired length of sleep [ms]
 
     !---------------------------------------------------
-    call shr_mpi_commrank(MPI_COMM_WORLD, rank)
-    if ( rank .ne. 0 ) then
-      return
-    endif
+    ! call shr_mpi_commrank(MPI_COMM_WORLD, rank)
+    ! if ( rank .ne. 0 ) then
+    !   return
+    ! endif
 
-    if (present(prefix)) then
-       if (len_trim(prefix) > 0 ) then
-          l_pre = trim(prefix)
-       end if
-    endif
+    ! if (present(prefix)) then
+    !    if (len_trim(prefix) > 0 ) then
+    !       l_pre = trim(prefix)
+    !    end if
+    ! endif
 
-    ! ! GDD busy wait
-    ! call date_and_time(values=t)
-    ! tstart_ms = (t(5)*3600+t(6)*60+t(7))*1000+t(8)
-    ! tstop_ms = 0
-    ! do while( dt >= (tstart_ms - tstop_ms) )
-    !   call date_and_time(values=t)
-    !   tstop_ms = (t(5)*3600+t(6)*60+t(7))*1000+t(8)
-    ! end do
+    ! ! ! GDD busy wait
+    ! ! call date_and_time(values=t)
+    ! ! tstart_ms = (t(5)*3600+t(6)*60+t(7))*1000+t(8)
+    ! ! tstop_ms = 0
+    ! ! do while( dt >= (tstart_ms - tstop_ms) )
+    ! !   call date_and_time(values=t)
+    ! !   tstop_ms = (t(5)*3600+t(6)*60+t(7))*1000+t(8)
+    ! ! end do
 
 
-    ierr = GPTLprint_memusage(trim(l_pre))
-    call flush()
+    ! ierr = GPTLprint_memusage(trim(l_pre))
+    ! call flush()
 
   end subroutine shr_mem_prtusage
   !===============================================================================
